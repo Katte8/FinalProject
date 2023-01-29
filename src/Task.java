@@ -8,6 +8,12 @@ public class Task {
     private String taskImportance;
     private String taskStatus;
 
+    private int userID;
+
+    public int getUserID() {
+        return userID;
+    }
+
     public int getTaskID() {
         return taskID;
     }
@@ -18,6 +24,10 @@ public class Task {
 
     public String getTaskText() {
         return taskText;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public void setTaskText(String taskText) {
@@ -47,4 +57,7 @@ public class Task {
     public void setTaskStatus(String taskStatus) {
         this.taskStatus = taskStatus;
     }
+
+
+
 }

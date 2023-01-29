@@ -1,7 +1,4 @@
-import db.DBConnection;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +13,7 @@ public class Main {
 
         System.out.println("Welcome to TODO manager!");
         char nextTry = 'y';
+        int choice = 0;
         while (nextTry =='y') {
 
             System.out.println("Do you want to login or register a new user?");
@@ -23,17 +21,65 @@ public class Main {
             System.out.println("r - register a new user");
             char action = scanner.nextLine().charAt(0);
 
-            if(action == 'l'){
+            if (action == 'l') {
                 login();
-            }else if (action == 'r'){
+                break;
+            } else if (action == 'r') {
                 registerUser();
-            }else {
+                break;
+            } else {
                 System.out.println("Invalid input!");
                 System.out.println("Do you want to try again? y/n");
                 nextTry = scanner.nextLine().charAt(0);
             }
 
+        }
 
+        printAction();
+
+        while(nextTry == 'y') {
+
+            System.out.println("Enter your choice");
+            try {
+
+                choice = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (choice) {
+                    case 0:
+                        printAction();
+                        break;
+                    case 1:
+                        //add task
+                        break;
+                    case 2:
+                        //edit task
+                        break;
+                    case 3:
+                        //print all tasks (includes sorting)
+                        break;
+                    case 4:
+                        //mark as done
+                        break;
+                    case 5:
+                        //remove task
+                        break;
+                    case 6:
+                        //delete all tasks
+                        break;
+                    case 7:
+                        nextTry = 'n';
+                        break;
+                    default:
+                        System.out.println("Input not valid (0-7)");
+                        break;
+                }
+
+
+            } catch (InputMismatchException e) {
+                System.err.println("Wrong input, Integers only");
+                scanner.nextLine();
+            }
         }
 
 
@@ -121,10 +167,18 @@ public class Main {
             System.out.println("You have registered an account!");
         }
 
-
-
-
     }
 
+    public static void printAction(){
+        System.out.println("\nPress");
+        System.out.println("\t 0 - To print choice options");
+        System.out.println("\t 1 - To add a task");
+        System.out.println("\t 2 - To edit a task");
+        System.out.println("\t 3 - To view all tasks");
+        System.out.println("\t 4 - To mark task as done");
+        System.out.println("\t 5 - To remove a task");
+        System.out.println("\t 6 - To delete all tasks");
+        System.out.println("\t 7 - To quit the application");
+    }
 
 }

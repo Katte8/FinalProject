@@ -1,23 +1,11 @@
-package db;
-
 import java.sql.*;
 import java.util.Scanner;
 
 public class DBConnection {
 
-    private final String dbURL = "jdbc:mysql://localhost:3306/finalproject";
+    private final String dbURL = "jdbc:mysql://localhost:3306/finaltask";
     private final String dbUser = "root";
-    private final String dbPsw = "Marsik565!";
-
-    /*    public void createUser(String userName,String password,String fullName) {
-            try (Connection conn = DriverManager.getConnection(dbURL, username, password)) {
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
+    private final String dbPsw = "Kyziukas555+";
 
     public int checkUser(String username, String password) {
         try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
