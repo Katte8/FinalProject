@@ -1,8 +1,13 @@
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//TODO
+// add printout statement when the list is empty
+// put validation where needed
 
 public class Main {
     static public int existingUserID = 0;
@@ -81,7 +86,34 @@ public class Main {
                         dataBase.addTask(taskText, taskDueDate, taskImportance, taskStatus, existingUserID);
                         break;
                     case 2:
-                        //edit task
+                        System.out.println("Enter task number you want to amend");
+                        Map<Integer, Integer> positions = new HashMap<>();
+                        positions = dataBase.printUserTasks(existingUserID);
+
+                        int taskNr = scanner.nextInt();
+
+                        System.out.println("Do you want to change task text, task due date or task importance?");
+                        System.out.println("t - edit text");
+                        System.out.println("d - edit due date");
+                        System.out.println("i - edit importance");
+                        scanner.nextLine();
+                        String editOption = scanner.nextLine();
+
+                        if(editOption.equals("t")){
+                            System.out.println("Enter amended task text");
+                            String newTaskText = scanner.nextLine();
+                            dataBase.editTaskText(positions.get(taskNr), newTaskText);
+                        }else if (editOption.equals("d")){
+                            System.out.println("Enter the new task date (YYYY-MM-DD): ");
+                            String dueDate = scanner.nextLine();
+                            dataBase.editDueDate(positions.get(taskNr), dueDate);
+                        }else if (editOption.equals("i")){
+                            System.out.println("Enter the new task importance (high/medium/low):");
+                            String newTaskImportance = scanner.nextLine();
+                            dataBase.editTaskImportance(positions.get(taskNr), newTaskImportance);
+                        }else {
+                            System.out.println("Invalid input!");
+                        }
                         break;
                     case 3:
                         System.out.println("Do you want to print tasks based on their importance?\nPress y - yes or n - no");
@@ -94,14 +126,25 @@ public class Main {
                             System.out.println("Invalid input. Try again");
                         }
                         break;
+                        // add printout statement when the list is empty
                     case 4:
                         //mark as done
                         break;
                     case 5:
-                        //remove task
+                        positions = dataBase.printUserTasks(existingUserID);
+                        System.out.println("Please enter task ID you want to delete");
+                        dataBase.removeTask(positions.get(scanner.nextInt()));
                         break;
                     case 6:
-                        //delete all tasks
+                        System.out.println("Are you sure you want to delete all tasks?\nPress y - yes or n - no");
+                        char deleteTasks = scanner.nextLine().charAt(0);
+                        if(deleteTasks == 'y'){
+                            dataBase.deleteAllTasks(existingUserID);
+                        } else if(deleteTasks == 'n'){
+                            break;
+                        } else{
+                            System.out.println("Invalid input. Try again");
+                        }
                         break;
                     case 7:
                         nextTry = 'n';

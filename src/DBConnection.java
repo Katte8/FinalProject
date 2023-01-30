@@ -1,5 +1,7 @@
 import java.io.Serializable;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBConnection {
 
@@ -96,16 +98,20 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
-    public void printUserTasks(int userId) {
+    public Map<Integer,Integer> printUserTasks(int userId) {
+        Map<Integer, Integer> positions = new HashMap<>();
         try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
 
             String sql = "SELECT * FROM TaskList WHERE userID ='" + userId + "'";
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
+
+
             int count = 0;
 
             while (resultSet.next()) {
+                int id = resultSet.getInt(1);
                 String taskText = resultSet.getString("tasktext");
                 String dueDate = (resultSet.getString("taskduedate") == null) ? "Not indicated" : resultSet.getString("taskduedate");
                 String taskImportance = (resultSet.getString("taskimportance") == null) ? "Not indicated" : resultSet.getString("taskimportance");
@@ -113,12 +119,14 @@ public class DBConnection {
 
                 String output = "Task #%d: %s - Deadline: %s - Importance: %s - Status: %s";
                 System.out.println(String.format(output, ++count, taskText, dueDate, taskImportance, taskStatus));
+                positions.put(count, id);
 
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return positions;
     }
     public void printTasksByImportance(int userId){
         try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
@@ -144,10 +152,77 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
+    public void editTaskText (int taskID, String taskText){
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw) ){
+            String sql = "UPDATE TaskList SET tasktext = ? WHERE taskID = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1,taskText);
+            preparedStatement.setInt(2, taskID);
+            preparedStatement.executeUpdate();
+            System.out.println("TODO task text updated successfully.");
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editDueDate (int taskID, String dueDate){
+
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw) ){
+            String sql = "UPDATE TaskList SET taskduedate = ? WHERE taskID = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, dueDate);
+            preparedStatement.setInt(2, taskID);
+            preparedStatement.executeUpdate();
+            System.out.println("TODO task due date updated successfully!");
+
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void editTaskImportance (int taskID, String taskImportance){
+
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw) ){
+            String sql = "UPDATE TaskList SET taskimportance = ? WHERE taskID = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1,taskImportance);
+            preparedStatement.setInt(2, taskID);
+            preparedStatement.executeUpdate();
+            System.out.println("TODO task importance updated successfully!");
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void removeTask(int taskID){
         try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
-            //how to get taskID??
+            String sql = "DELETE FROM TaskList WHERE taskID = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1,taskID);
+            preparedStatement.executeUpdate();
+
+            System.out.println("The task was deleted");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteAllTasks(int userId){
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
+            String sql = "DELETE FROM TaskList WHERE userID = ?;";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1,userId);
+            preparedStatement.executeUpdate();
+
+            System.out.println("The task was deleted");
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
