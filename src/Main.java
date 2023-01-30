@@ -32,7 +32,6 @@ public class Main {
                 System.out.println("Do you want to try again? y/n");
                 nextTry = scanner.nextLine().charAt(0);
             }
-
         }
 
         printAction();
@@ -50,13 +49,50 @@ public class Main {
                         printAction();
                         break;
                     case 1:
-                        //add task
+                        System.out.println("Enter task name: ");
+                        String taskText = scanner.nextLine();
+
+                        System.out.println("Optional step - Do you want to indicate task's due date? (y - yes or n - no)");
+                        char indicateDate = scanner.nextLine().charAt(0);
+                        String taskDueDate = "";
+                        if (indicateDate == 'n') {
+                            taskDueDate = null;
+                        } else if (indicateDate == 'y') {
+                            System.out.println("Enter task due date (YYYY-MM-DD): ");
+                            taskDueDate = scanner.nextLine();
+                        } else{
+                            System.out.println("Invalid input. Try again");
+                        }
+
+                        System.out.println("Optional step - Do you want to indicate task's importance? (y - yes or n - no)");
+                        char indicateImportance = scanner.nextLine().charAt(0);
+                        String taskImportance = "";
+                        if (indicateImportance == 'n') {
+                            taskImportance = null;
+                        } else if (indicateImportance == 'y') {
+                            System.out.println("Enter task importance (high/medium/low): ");
+                            taskImportance = scanner.nextLine();
+                        } else{
+                            System.out.println("Invalid input. Try again");
+                        }
+
+                        String taskStatus = "In progress";
+
+                        dataBase.addTask(taskText, taskDueDate, taskImportance, taskStatus, existingUserID);
                         break;
                     case 2:
                         //edit task
                         break;
                     case 3:
-                        //print all tasks (includes sorting)
+                        System.out.println("Do you want to print tasks based on their importance?\nPress y - yes or n - no");
+                        char printByImportance = scanner.nextLine().charAt(0);
+                        if (printByImportance == 'n') {
+                            dataBase.printUserTasks(existingUserID);
+                        } else if (printByImportance == 'y') {
+                            dataBase.printTasksByImportance(existingUserID);
+                        } else{
+                            System.out.println("Invalid input. Try again");
+                        }
                         break;
                     case 4:
                         //mark as done
@@ -81,10 +117,7 @@ public class Main {
                 scanner.nextLine();
             }
         }
-
-
     }
-
     public static void login () {
         User existingUser = new User();
 
@@ -101,10 +134,7 @@ public class Main {
             System.out.println("You have logged in successfully!");
             existingUserID = userID;
         }
-
-
     }
-
     public static void registerUser (){
         User newUser = new User();
         System.out.println("Enter username");
@@ -134,7 +164,6 @@ public class Main {
                 matcher = pattern.matcher(newUser.getUsername());
             }
             userID = dataBase.validateUserName(newUser.getUsername());
-
         }
 
         System.out.println("Enter password");
@@ -166,9 +195,7 @@ public class Main {
         if (existingUserID>0){
             System.out.println("You have registered an account!");
         }
-
     }
-
     public static void printAction(){
         System.out.println("\nPress");
         System.out.println("\t 0 - To print choice options");
@@ -182,3 +209,5 @@ public class Main {
     }
 
 }
+
+

@@ -4,7 +4,7 @@ public class Task {
 
     private int taskID;
     private String taskText;
-    private LocalDate taskDueDate;
+    private String taskDueDate;
     private String taskImportance;
     private String taskStatus;
 
@@ -34,11 +34,11 @@ public class Task {
         this.taskText = taskText;
     }
 
-    public LocalDate getTaskDueDate() {
+    public String getTaskDueDate() {
         return taskDueDate;
     }
 
-    public void setTaskDueDate(LocalDate taskDueDate) {
+    public void setTaskDueDate(String taskDueDate) {
         this.taskDueDate = taskDueDate;
     }
 

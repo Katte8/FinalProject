@@ -1,11 +1,11 @@
 public class User {
 
-    private int userID;
+    private static int userID;
     private String username;
     private String psw;
     private String fullName;
 
-    public int getUserID() {
+    public static int getUserID() {
         return userID;
     }
 
