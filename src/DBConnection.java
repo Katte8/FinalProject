@@ -28,6 +28,43 @@ public class DBConnection {
         }
         return 0;
     }
+    public int checkTaskList(int userId){
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
+            String sql = "SELECT * FROM TaskList WHERE userID = '" + userId + "';";
+
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if (resultSet.next()) {
+                return 1;
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int checkNumberOfTasks(int userId){
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
+            String sql = "SELECT COUNT(taskID) FROM TaskList WHERE userID = '" + userId + "';";
+
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     public int createUser(String username, String password, String fullName) {
         try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
             String sql = "INSERT INTO Users (username, password, fullname) VALUES (?,?,?)";
@@ -221,6 +258,21 @@ public class DBConnection {
             preparedStatement.executeUpdate();
 
             System.out.println("The task was deleted");
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void markAsDone(int taskID){
+        try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {
+            String sql = "UPDATE TaskList SET taskstatus = 'Done' WHERE taskID = ?;";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1,taskID);
+            preparedStatement.executeUpdate();
+
+            System.out.println("The task status was changed");
 
 
         } catch (SQLException e) {
