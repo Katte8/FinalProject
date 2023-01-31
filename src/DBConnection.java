@@ -257,7 +257,7 @@ public class DBConnection {
             preparedStatement.setInt(1,userId);
             preparedStatement.executeUpdate();
 
-            System.out.println("The task was deleted");
+            System.out.println("The tasks were deleted");
 
 
         } catch (SQLException e) {
