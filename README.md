@@ -1,7 +1,6 @@
-# FinalProject
-This is group #3 final project
+#TODO LIST MANAGER
 
-TODO LIST MANAGER
+This is group #3 final project
 
 Project Description:
 
