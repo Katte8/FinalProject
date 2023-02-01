@@ -63,7 +63,7 @@ public class Main {
                         System.out.println("Enter a task: ");
                         String taskText = scanner.nextLine();
 
-                        System.out.println("Optional step - Do you want to indicate task's due date? (y - yes or n - no)"); //ADDED VALIDATION
+                        System.out.println("Optional step - Do you want to indicate task's due date? (y - yes or n - no)");
                         char indicateDate = scanner.nextLine().charAt(0);
                         String taskDueDate = "";
                         if (indicateDate == 'n') {
@@ -81,7 +81,7 @@ public class Main {
                             System.out.println("Invalid input. Try again");
                         }
 
-                        System.out.println("Optional step - Do you want to indicate task's importance? (y - yes or n - no)");//ADDED VALIDATION
+                        System.out.println("Optional step - Do you want to indicate task's importance? (y - yes or n - no)");
                         char indicateImportance = scanner.nextLine().charAt(0);
                         String taskImportance = "";
                         if (indicateImportance == 'n') {
@@ -105,7 +105,7 @@ public class Main {
                         break;
 
                     case 2:
-                        System.out.println("Enter task number you want to amend"); //ADDED VALIDATION
+                        System.out.println("Enter task number you want to amend");
                         positions = dataBase.printUserTasks(existingUserID);
 
                         int taskNr = scanner.nextInt();
@@ -125,7 +125,7 @@ public class Main {
                                     String newTaskText = scanner.nextLine();
                                     dataBase.editTaskText(positions.get(taskNr), newTaskText);
                                 } else if (editOption.equals("d")) {
-                                    System.out.println("Enter the new task date (YYYY-MM-DD) or enter 0 to remove previously indicated date:"); //ADDED VALIDATION
+                                    System.out.println("Enter the new task date (YYYY-MM-DD) or enter 0 to remove previously indicated date:");
                                     String dueDate = scanner.nextLine().trim();
                                     if (dueDate.equals("0")) {
                                         dataBase.editDueDate(positions.get(taskNr), null);
@@ -135,7 +135,7 @@ public class Main {
                                         System.out.println("Invalid input. Try again");
                                     }
                                 } else if (editOption.equals("i")) {
-                                    System.out.println("Enter the new task importance (high/medium/low):"); //ADDED VALIDATION
+                                    System.out.println("Enter the new task importance (high/medium/low):");
                                     String newTaskImportance = scanner.nextLine().toLowerCase().trim();
                                     if (newTaskImportance.equals("high") || newTaskImportance.equals("medium") || newTaskImportance.equals("low")) {
                                         dataBase.editTaskImportance(positions.get(taskNr), newTaskImportance);
@@ -157,7 +157,7 @@ public class Main {
                     case 3:
                         int taskExists = dataBase.checkTaskList(existingUserID);
                         if(taskExists == 1) {
-                            System.out.println("Do you want to print the tasks based on their importance?\nPress y - yes or n - no"); //HAS VALIDATION
+                            System.out.println("Do you want to print the tasks based on their importance?\nPress y - yes or n - no");
                             char printByImportance = scanner.nextLine().charAt(0);
                             if (printByImportance == 'n') {
                                 dataBase.printUserTasks(existingUserID);
@@ -173,7 +173,7 @@ public class Main {
                         break;
                     case 4:
                         try {
-                            System.out.println("Enter the task number you want mark as done"); //ADDED VALIDATION
+                            System.out.println("Enter the task number you want mark as done");
                             positions = dataBase.printUserTasks(existingUserID);
                             int doneTask = scanner.nextInt();
                             numberOfTasksInDatabase = dataBase.checkNumberOfTasks(existingUserID);
@@ -188,7 +188,7 @@ public class Main {
                             break;
                         }
                     case 5:
-                        System.out.println("Please enter the task ID you want to delete"); //ADDED VALIDATION
+                        System.out.println("Please enter the task ID you want to delete");
                         positions = dataBase.printUserTasks(existingUserID);
                         int deletedTask = scanner.nextInt();
                         numberOfTasksInDatabase = dataBase.checkNumberOfTasks(existingUserID);
@@ -199,7 +199,7 @@ public class Main {
                         }
                         break;
                     case 6:
-                        System.out.println("Are you sure you want to delete all tasks?\nPress y - yes or n - no"); //HAS VALIDATION
+                        System.out.println("Are you sure you want to delete all tasks?\nPress y - yes or n - no");
                         char deleteTasks = scanner.nextLine().charAt(0);
                         if(deleteTasks == 'y'){
                             dataBase.deleteAllTasks(existingUserID);
@@ -225,17 +225,13 @@ public class Main {
         }
     }
     public static boolean login () {
-        User existingUser = new User();
 
         System.out.println("Enter username");
         String existingUserName = scanner.nextLine();
-    /*existingUser.setUsername(scanner.nextLine());*/
 
         System.out.println("Enter password");
         String existingUserPsw = scanner.nextLine();
-        /*existingUser.setPsw(scanner.nextLine());*/
 
-        // method checkUser
         int userID = dataBase.checkUser(existingUserName,existingUserPsw);
 
         if (userID > 0) {
