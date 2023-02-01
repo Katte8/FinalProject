@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class DBConnection {
 
-    private final String dbURL = "jdbc:mysql://localhost:3306/finaltask"; //dont forget to change!!
+    private final String dbURL = "jdbc:mysql://localhost:3306/finalproject"; //dont forget to change!!
     private final String dbUser = "root";
-    private final String dbPsw = "Kyziukas555+"; //dont forget to change!!
+    private final String dbPsw = "Marsik565!"; //dont forget to change!!
 
     public int checkUser(String username, String password) {
         try (Connection conn = DriverManager.getConnection(dbURL, dbUser, dbPsw)) {

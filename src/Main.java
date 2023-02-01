@@ -6,9 +6,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO
-// add validation where needed (case 2 & 5)
-// E: added date format validation method, markAsDone method, checkTaskList method, checkNumberOfTasks method, updated some parts with validation
 
 public class Main {
     static public int existingUserID = 0;
@@ -31,8 +28,11 @@ public class Main {
             char action = scanner.nextLine().charAt(0);
 
             if (action == 'l') {
-                login();
-                break;
+                if(!login()){
+                    System.out.println("Incorrect username or password ");
+                }else {
+                    break;
+                }
             } else if (action == 'r') {
                 registerUser();
                 break;
@@ -70,7 +70,7 @@ public class Main {
                             taskDueDate = null;
                         } else if (indicateDate == 'y') {
                             System.out.println("Enter task due date (YYYY-MM-DD): ");
-                            String temp = scanner.nextLine();
+                            String temp = scanner.nextLine().trim();
                             if(isValidDateFormat(temp)){
                                 taskDueDate = temp;
                             }else{
@@ -88,7 +88,7 @@ public class Main {
                             taskImportance = null;
                         } else if (indicateImportance == 'y') {
                             System.out.println("Enter task importance (high/medium/low): ");
-                            String temp = scanner.nextLine().toLowerCase();
+                            String temp = scanner.nextLine().toLowerCase().trim();
                             if (temp.equals("high") || temp.equals("medium") || temp.equals("low")){
                                 taskImportance = temp;
                             }else {
@@ -126,7 +126,7 @@ public class Main {
                                     dataBase.editTaskText(positions.get(taskNr), newTaskText);
                                 } else if (editOption.equals("d")) {
                                     System.out.println("Enter the new task date (YYYY-MM-DD) or enter 0 to remove previously indicated date:"); //ADDED VALIDATION
-                                    String dueDate = scanner.nextLine();
+                                    String dueDate = scanner.nextLine().trim();
                                     if (dueDate.equals("0")) {
                                         dataBase.editDueDate(positions.get(taskNr), null);
                                     } else if (isValidDateFormat(dueDate)) {
@@ -136,7 +136,7 @@ public class Main {
                                     }
                                 } else if (editOption.equals("i")) {
                                     System.out.println("Enter the new task importance (high/medium/low):"); //ADDED VALIDATION
-                                    String newTaskImportance = scanner.nextLine().toLowerCase();
+                                    String newTaskImportance = scanner.nextLine().toLowerCase().trim();
                                     if (newTaskImportance.equals("high") || newTaskImportance.equals("medium") || newTaskImportance.equals("low")) {
                                         dataBase.editTaskImportance(positions.get(taskNr), newTaskImportance);
                                     } else {
@@ -224,21 +224,26 @@ public class Main {
             }
         }
     }
-    public static void login () {
+    public static boolean login () {
         User existingUser = new User();
 
         System.out.println("Enter username");
-        existingUser.setUsername(scanner.nextLine());
+        String existingUserName = scanner.nextLine();
+    /*existingUser.setUsername(scanner.nextLine());*/
 
         System.out.println("Enter password");
-        existingUser.setPsw(scanner.nextLine());
+        String existingUserPsw = scanner.nextLine();
+        /*existingUser.setPsw(scanner.nextLine());*/
 
         // method checkUser
-        int userID = dataBase.checkUser(existingUser.getUsername(),existingUser.getPsw());
+        int userID = dataBase.checkUser(existingUserName,existingUserPsw);
 
         if (userID > 0) {
             System.out.println("You have logged in successfully!");
             existingUserID = userID;
+            return true;
+        }else {
+            return false;
         }
     }
     public static void registerUser (){
