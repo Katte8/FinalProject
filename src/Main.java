@@ -16,6 +16,8 @@ public class Main {
     static DBConnection dataBase = new DBConnection();
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
+    static int numberOfTasksInDatabase = 0;
+
     public static void main(String[] args) {
 
         System.out.println("Welcome to TODO manager!");
@@ -103,44 +105,55 @@ public class Main {
                         break;
 
                     case 2:
-                        System.out.println("Enter task number you want to amend"); //NEEDS POSITIONS VALIDATION
+                        System.out.println("Enter task number you want to amend"); //ADDED VALIDATION
                         positions = dataBase.printUserTasks(existingUserID);
 
                         int taskNr = scanner.nextInt();
+                        numberOfTasksInDatabase = dataBase.checkNumberOfTasks(existingUserID);
 
-                        System.out.println("Do you want to change task text, task due date or task importance?");
-                        System.out.println("t - edit text");
-                        System.out.println("d - edit due date");
-                        System.out.println("i - edit importance");
-                        scanner.nextLine();
-                        String editOption = scanner.nextLine();
+                        try {
+                            if (taskNr > 0 && taskNr <= numberOfTasksInDatabase) {
+                                System.out.println("Do you want to change task text, task due date or task importance?");
+                                System.out.println("t - edit text");
+                                System.out.println("d - edit due date");
+                                System.out.println("i - edit importance");
+                                scanner.nextLine();
+                                String editOption = scanner.nextLine();
 
-                        if(editOption.equals("t")){
-                            System.out.println("Enter a new text for the task:");
-                            String newTaskText = scanner.nextLine();
-                            dataBase.editTaskText(positions.get(taskNr), newTaskText);
-                        }else if (editOption.equals("d")){
-                            System.out.println("Enter the new task date (YYYY-MM-DD) or enter 0 to remove previously indicated date:"); //ADDED VALIDATION
-                            String dueDate = scanner.nextLine();
-                            if(dueDate.equals("0")){
-                                dataBase.editDueDate(positions.get(taskNr), null);
-                            } else if(isValidDateFormat(dueDate)){
-                                dataBase.editDueDate(positions.get(taskNr), dueDate);
+                                if (editOption.equals("t")) {
+                                    System.out.println("Enter a new text for the task:");
+                                    String newTaskText = scanner.nextLine();
+                                    dataBase.editTaskText(positions.get(taskNr), newTaskText);
+                                } else if (editOption.equals("d")) {
+                                    System.out.println("Enter the new task date (YYYY-MM-DD) or enter 0 to remove previously indicated date:"); //ADDED VALIDATION
+                                    String dueDate = scanner.nextLine();
+                                    if (dueDate.equals("0")) {
+                                        dataBase.editDueDate(positions.get(taskNr), null);
+                                    } else if (isValidDateFormat(dueDate)) {
+                                        dataBase.editDueDate(positions.get(taskNr), dueDate);
+                                    } else {
+                                        System.out.println("Invalid input. Try again");
+                                    }
+                                } else if (editOption.equals("i")) {
+                                    System.out.println("Enter the new task importance (high/medium/low):"); //ADDED VALIDATION
+                                    String newTaskImportance = scanner.nextLine().toLowerCase();
+                                    if (newTaskImportance.equals("high") || newTaskImportance.equals("medium") || newTaskImportance.equals("low")) {
+                                        dataBase.editTaskImportance(positions.get(taskNr), newTaskImportance);
+                                    } else {
+                                        System.out.println("Invalid input. Try again");
+                                    }
+                                } else {
+                                    System.out.println("Invalid input. Try again");
+                                }
+                                break;
                             } else {
-                                System.out.println("Invalid input. Try again");
+                                System.out.println("Invalid task ID. Try again");
                             }
-                        }else if (editOption.equals("i")){
-                            System.out.println("Enter the new task importance (high/medium/low):"); //ADDED VALIDATION
-                            String newTaskImportance = scanner.nextLine().toLowerCase();
-                            if (newTaskImportance.equals("high") || newTaskImportance.equals("medium") || newTaskImportance.equals("low")){
-                                dataBase.editTaskImportance(positions.get(taskNr), newTaskImportance);
-                            } else {
-                                System.out.println("Invalid input. Try again");
-                            }
-                        }else {
-                            System.out.println("Invalid input. Try again");
+                            break;
+                        }catch(StringIndexOutOfBoundsException e){
+                            System.out.println("Invalid task ID. Try again");
+                            break;
                         }
-                        break;
                     case 3:
                         int taskExists = dataBase.checkTaskList(existingUserID);
                         if(taskExists == 1) {
@@ -163,8 +176,8 @@ public class Main {
                             System.out.println("Enter the task number you want mark as done"); //ADDED VALIDATION
                             positions = dataBase.printUserTasks(existingUserID);
                             int doneTask = scanner.nextInt();
-                            int numberOfTasksInDatabase = dataBase.checkNumberOfTasks(existingUserID);
-                            if (doneTask > 0 || doneTask <= numberOfTasksInDatabase) {
+                            numberOfTasksInDatabase = dataBase.checkNumberOfTasks(existingUserID);
+                            if (doneTask > 0 && doneTask <= numberOfTasksInDatabase) {
                                 dataBase.markAsDone(positions.get(doneTask));
                             } else {
                                 System.out.println("Invalid task ID. Try again");
@@ -175,9 +188,15 @@ public class Main {
                             break;
                         }
                     case 5:
-                        System.out.println("Please enter the task ID you want to delete"); //NEEDS POSITIONS VALIDATION
+                        System.out.println("Please enter the task ID you want to delete"); //ADDED VALIDATION
                         positions = dataBase.printUserTasks(existingUserID);
-                        dataBase.removeTask(positions.get(scanner.nextInt()));
+                        int deletedTask = scanner.nextInt();
+                        numberOfTasksInDatabase = dataBase.checkNumberOfTasks(existingUserID);
+                        if(deletedTask > 0 && deletedTask <= numberOfTasksInDatabase){
+                            dataBase.removeTask(positions.get(deletedTask));
+                        } else{
+                            System.out.println("Invalid task ID. Try again");
+                        }
                         break;
                     case 6:
                         System.out.println("Are you sure you want to delete all tasks?\nPress y - yes or n - no"); //HAS VALIDATION
